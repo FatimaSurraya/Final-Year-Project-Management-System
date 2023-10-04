@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "AddMeeting";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+@model RMS.ViewModels.MeetingViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="AssignedTo">Assign To:</label>
+                @Html.ListBoxFor(model => model.SelectedAssignedTo, Model.AssignedTo, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label for="DueDate">Scheduled Date:</label>
+                <input type="date" id="datepicker" name="datepicker" class="form-control">
+            </div>
+
+            <!-- Meeting Type Dropdown -->
+            <div class="form-group">
+                <label for="MeetingType">Meeting Type:</label>
+                <select id="MeetingType" class="form-control">
+                    <option value="Physical">Physical</option>
+                    <option value="Online">Online</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-success" onclick="scheduleMeeting()">Schedule Meeting</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    function scheduleMeeting() {
+        var selectedAssignedTo = $("#SelectedAssignedTo").val();
+        var scheduledDate = $("#datepicker").val();
+        var meetingType = $("#MeetingType").val();
+
+        var meetingData = {
+            SelectedAssignedTo: selectedAssignedTo,
+            ScheduledDate: scheduledDate,
+            MeetingType: meetingType 
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Meeting/SaveMeeting",
+            data: JSON.stringify(meetingData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: MeetingSaved
+        });
+
+        function MeetingSaved(response) {
+            if (response == 1) {
+                window.location.href = "/Meeting/ListAllMeetings";
+            }
+        }
+    }
+</script>

@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "ProjectDetail";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+@model List<RMS.Models.ProjectDetail>
+
+<h2 style="margin-left:10px">Register Project</h2>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="wrapper wrapper-content">
+                        <div class="row">
+                            <table class="table  table-hover table-responsive table-striped" id="mttable">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Skill</th>
+                                        <th>Domain</th>
+                                        <th>Tools</th>
+                                        <th>Students Allowed</th>
+                                        <th>Register</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_body" class="scrollable">
+                                    @foreach (var project in Model)
+                                    {
+                                        <tr>
+                                            <td>@project.Title</td>
+                                            <td>@project.Skills</td>
+                                            <td>@project.Domain</td>
+                                            <td>@project.Tools</td>
+                                            <td>@project.StudentsAllowed</td>
+                                            <td>
+                                                <a data-project-id="@project.ProjectId" class="btn btn-success register-button">Project Request</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".register-button").click(function () {
+            var projectId = $(this).data("project-id");
+
+            $.ajax({
+                type: "POST", 
+                url: "/Project/RegisterProject", 
+                data: { projectId: projectId },
+                success: function (response) {
+                    if (response == 1) {
+                        alert("Request sent to supervisor!");
+                    } else {
+                        alert("Failed to register project. " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while registering the project.");
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,81 @@
+﻿@{
+    ViewBag.Title = "EditTask";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+@model RMS.ViewModels.TaskViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            @using (Html.BeginForm("SaveTask", "Project", FormMethod.Post, new { id = "taskForm" }))
+            {
+                <div class="form-group">
+                    @Html.AntiForgeryToken() <!-- Moved this inside the form -->
+
+                    <label for="SelectedProjectId">Project:</label>
+                    @Html.DropDownListFor(model => model.SelectedProjectId, Model.Projects, "Select Project", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label for="SelectedAssignedTo">Assigned To:</label>
+                    @Html.ListBoxFor(model => model.SelectedAssignedTo, Model.AssignedTo, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    <label for="DueDate">Due Date:</label>
+                    @Html.TextBoxFor(model => model.DueDate, new { @class = "form-control", @type = "date" })
+                </div>
+
+                <div class="form-group">
+                    <label for="TaskStatus">Task Status:</label>
+                    @Html.TextBoxFor(model => model.TaskStatus, new { @class = "form-control", @readonly = "readonly", @Value = "New" })
+                </div>
+
+                <button type="button" id="submitTask" class="btn btn-success" onclick="updateTask()">Update</button>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+
+    function updateTask() {
+        var selectedProjectId = $("#SelectedProjectId").val();
+        var selectedAssignedTo = $("#SelectedAssignedTo").val();
+        var dueDate = $("#datepicker").val();
+        var taskStatus = $("#TaskStatus").val();
+
+        var taskData = {
+            SelectedProjectId: selectedProjectId,
+            SelectedAssignedTo: selectedAssignedTo,
+            DueDate: dueDate,
+            TaskStatus: taskStatus
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Project/SaveTask",
+            data: JSON.stringify(taskData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: TaskSaved
+        });
+
+        function TaskSaved(response) {
+            if (response == 1) {
+                window.location.href = "/Project/ListAllTasks";
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $("#SelectedProjectId").val("@Model.SelectedProjectId");
+        $("#SelectedAssignedTo").val([@Model.SelectedAssignedTo]);
+    });
+
+</script>

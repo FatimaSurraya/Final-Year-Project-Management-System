@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "AddProject";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<h2>Add Project</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+
+            <div class="form-group">
+                <label for="MenuTitle"> Title:</label>
+                <input type="text" class="form-control" id="Title">
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Description:</label>
+                <input type="text" class="form-control" id="Description">
+            </div>
+
+            <div class="form-group">
+                <label for="Price">Skill</label>
+                <input type="text" class="form-control" id="Skill">
+            </div>
+
+            <div class="form-group">
+                <label for="Image">Project Domain:</label>
+                <select ID="domain" Class="selectpicker form-control" data-style="btn-primary">
+                    <option disabled>Please Select Domain Type</option>
+                    <option value="Web Application">Web Application</option>
+                    <option value="Mobile Application">Mobile Application</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Networking">Networking</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="MenuType">Tools</label>
+                <input type="text" class="form-control" id="Tool">
+            </div>
+
+            <div class="form-group">
+                <label for="MenuType">Student Allowed</label>
+                <input type="number" class="form-control" id="studentallowed">
+            </div>
+
+            <div class="form-group">
+                <label for="UploadDocument">Upload Documents:</label>
+                <input type="file" id="UploadDocument" class="form-control-file" multiple>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" onclick="submitProject()" class="btn-success btn-sm" value="Submit">Submit</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<!-- Include Select2 CSS -->
+<link href="~/Content/css/plugins/select2/select2.min.css" rel="stylesheet" />
+
+<!-- Include Select2 JS -->
+<script src="~/Content/js/plugins/select2/select2.full.min.js"></script>
+
+<script>
+
+    function submitProject() {
+        var Title = document.getElementById("Title").value;
+        var Description = document.getElementById("Description").value;
+        var Skills = document.getElementById("Skill").value;
+        var domain = document.getElementById("domain").value;
+        var Tool = document.getElementById("Tool").value;
+        var studentallowed = document.getElementById("studentallowed").value;
+        var uploadDocuments = document.getElementById("UploadDocument").files;
+
+        if (!Title) {
+            alert("Please Enter Title to submit.");
+            return;
+        }
+        if (!Skills) {
+            alert("Please Enter Skill to submit.");
+            return;
+        }
+        if (!Tool) {
+            alert("Please Enter Tool to submit.");
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('Title', Title);
+        formData.append('Description', Description);
+        formData.append('Skills', Skills);
+        formData.append('Domain', domain);
+        formData.append('Tools', Tool);
+        formData.append('StudentsAllowed', studentallowed);
+
+        for (var i = 0; i < uploadDocuments.length; i++) {
+            formData.append('UploadDocuments', uploadDocuments[i]);
+        }
+
+        $.ajax({
+            url: '/Project/InsertProject',
+            method: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (obj) {
+                if (obj == 1) {
+                    alert("New Project Record Saved Successfully");
+                    window.location.href = '/Project/ListAllProjects';
+                }
+            }
+        });
+    }
+
+</script>
+

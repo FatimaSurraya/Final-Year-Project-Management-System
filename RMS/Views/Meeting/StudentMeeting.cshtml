@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Meeting";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+@model List<RMS.Models.Meeting>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="wrapper wrapper-content">
+                        <div class="row">
+                            <table class="table  table-hover table-responsive table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Meeting ID</th>
+                                        <th>Meeting Type</th>
+                                        <th>Meeting Host</th>
+                                        <th>Scheduled Date</th>
+                                        <th>Accept</th>
+                                        <th>Reject</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table_body" class="scrollable">
+                                    @if (Model.Count() > 0)
+                                    {
+                                        foreach (var meeting in Model)
+                                        {
+                                            <tr>
+                                                <td>@meeting.MeetingId</td>
+                                                <td>@meeting.MeetingType</td>
+                                                <td>@string.Concat(meeting.User1.FirstName, " ", meeting.User1.LastName)</td>
+                                                <td>@meeting.ScheduledDate.Date</td>
+                                                <td>
+                                                    <a data-user-id="@meeting.SupervisorID" class="btn btn-success accept-button">Accept</a>
+                                                </td>
+                                                <td>
+                                                    <a data-user-id="@meeting.SupervisorID" class="btn btn-danger reject-button">Reject</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $(".accept-button").click(function () {
+            sendUpdate("accepted", $(this).data("user-id"));
+        });
+        $(".reject-button").click(function () {
+            sendUpdate("rejected", $(this).data("user-id"));
+        });
+
+        function sendUpdate(msg, supervisorId) {
+            $.ajax({
+                type: "POST",
+                url: "/Meeting/SendMeetingUpdate",
+                data: { supervisorId: supervisorId, msg: msg },
+                success: function (response) {
+                    if (response == 1) {
+                        alert("Response sent to supervisor");
+                    } else {
+                        alert("Failed to register project. " + response.message);
+                    }
+                }
+            });
+        }
+    });
+
+</script>

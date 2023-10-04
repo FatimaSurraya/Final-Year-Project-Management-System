@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e09089e6dcc34741a21a17d141c8702e" Name="Diagram1">
+        <EntityTypeShape EntityType="FYPMS_Model.Meeting" Width="1.5" PointX="5.25" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.Message" Width="1.5" PointX="5.25" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.ProjectDetail" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.ProjectDocument" Width="1.5" PointX="7.5" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.Result" Width="1.5" PointX="9.75" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.Task" Width="1.5" PointX="7.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.Timetable" Width="1.5" PointX="4" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.User" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="FYPMS_Model.UserType" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <AssociationConnector Association="FYPMS_Model.FK_Meetings_Users_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Meetings_Users_Supervisor" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Messages_Users_Receiver" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Messages_Users_Sender" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_ProjectDetail_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_ProjectDocuments_ProjectDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Tasks_ProjectDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Results_Tasks" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Results_Users_Student" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Tasks_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Timetables_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="FYPMS_Model.FK_Users_UserTypes" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="FYPMS_Model.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

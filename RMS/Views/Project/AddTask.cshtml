@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "AddTask";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+@model RMS.ViewModels.TaskViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Project">Project:</label>
+                @Html.DropDownListFor(model => model.SelectedProjectId, Model.Projects, "Select Project", new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label for="AssignedTo">Assign To:</label>
+                @Html.ListBoxFor(model => model.SelectedAssignedTo, Model.AssignedTo, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <label for="DueDate">Due Date:</label>
+                <input type="date" id="datepicker" name="datepicker" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-success" onclick="submitTask()">Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    function submitTask() {
+        var selectedProjectId = $("#SelectedProjectId").val();
+        var selectedAssignedTo = $("#SelectedAssignedTo").val();
+        var dueDate = $("#datepicker").val();
+
+        var taskData = {
+            SelectedProjectId: selectedProjectId,
+            SelectedAssignedTo: selectedAssignedTo,
+            DueDate: dueDate
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Project/SaveTask", 
+            data: JSON.stringify(taskData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: TaskSaved
+        });
+
+        function TaskSaved(response) {
+            if (response == 1) {
+                window.location.href = "/Project/ListAllTasks";
+            }
+        }
+    }
+</script>
+
+

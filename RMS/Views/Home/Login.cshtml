@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <title>Login</title>
+</head>
+<body class="img-responsive ">
+    <style>
+        body {
+            background-image: url("../Content/images/background.jpg");
+            padding-top: 100px;
+            background-size: auto;
+        }
+    </style>
+
+    <form id="account_form">
+        <div class="container">
+            <div class="col-md-6" style="color: white;">
+                <h1> Final Year Project Management System</h1>
+                <p>Login in here .</p>
+                <a  Class="btn-sm btn-warning" href="/Home/Register">Register</a>
+                <hr />
+
+            </div>
+            <div class="col-md-6">
+                <div class="well">
+                    <h4>Login here.</h4>
+                    <div id="alert"></div>
+                    <label>Username</label>
+                    <input type="text" ID="login_user_name" Class="form-control">
+                    <label>Password</label>
+                    <input type="password" ID="login_password" Class="form-control" TextMode="Password">
+                    <br />
+                    <input type="button" ID="btn_login" Text="LOGIN" Class="btn btn-warning btn-block" value="Login">
+
+                    <Label ID="status"></Label>
+
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+    
+    
+    <script>
+        $("#btn_login").click( function(){
+            var username =  $("#login_user_name").val();
+            var password = $("#login_password").val();
+
+            if (!username) {
+                alert("Please Enter Username")
+                return;
+            }
+
+            $.ajax({
+                url: '/Home/Login',
+                method: 'post',
+                traditional: true,
+                data: { 'userName': username, 'password': password },
+                success: Loginsuccess
+            });
+
+        });
+
+        function  Loginsuccess(response){
+
+            if (response == 1) {
+                window.location.href = "/User/UsersDetail";
+            }
+            if (response == 2) {
+                window.location.href = "/Project/ListAllProjects";
+            }
+            if (response == 3) {
+                window.location.href = "/Project/ListAllStudentProjects";
+            }
+        }
+
+    </script>
+
+</body>
+</html>

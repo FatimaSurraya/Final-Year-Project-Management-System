@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "CreateUser";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<style>
+    .asterisk:after {
+        content: " *";
+        color: red;
+    }
+</style>
+
+<div class="container">
+    <form id="account_form">
+        <div class="container">
+            <div class="col-md-6">
+                <div class="well">
+                    <h2>Add User</h2>
+                    <div id="alert"></div>
+                    <label class="asterisk">First Name</label>
+                    <input type="text" id="login_first_name" class="form-control">
+
+                    <label class="asterisk">Last Name</label>
+                    <input type="text" id="login_last_name" class="form-control">
+
+                    <label class="asterisk">Email</label>
+                    <input type="text" id="login_email" class="form-control">
+
+                    <label class="asterisk">User Type</label>
+                    <select class="form-control" id="login_usertype">
+                        <option value="1">Admin</option>
+                        <option value="2">Supervisor</option>
+                        <option value="3">Student</option>
+                    </select>
+
+                    <label class="asterisk">Password</label>
+                    <input type="password" id="login_password" class="form-control" textMode="Password">
+                    <br />
+
+                    <input type="button" onclick="SubmitUser()" id="btn_submit" class="btn btn-warning btn-block" value="Submit">
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script>
+
+    function SubmitUser() {
+        var FirstName = $("#login_first_name").val();
+        var LastName = $("#login_last_name").val();
+        var Email = $("#login_email").val();
+        var Password = $("#login_password").val();
+        var UserType = $("#login_usertype").val();
+
+        if (!FirstName) {
+            alert("Please enter First Name");
+            return;
+        }
+        if (!LastName) {
+            alert("Please enter Last Name");
+            return;
+        }
+        if (!Email) {
+            alert("Please enter Email");
+            return;
+        }
+        if (!Password) {
+            alert("Please enter Password");
+            return;
+        }
+
+        $.ajax({
+            url: '/User/CreateUser',
+            method: 'post',
+            traditional: true,
+            data: {
+                'FirstName': FirstName,
+                'LastName': LastName,
+                'Password': Password,
+                'Email': Email,
+                'UserTypeId': UserType
+            },
+            success: OnSuccessfulUserCreation
+        });
+    }
+
+    function OnSuccessfulUserCreation(response) {
+        if (response == "1") {
+            window.location.href = "/User/UsersDetail";
+        }
+        if (response == "-1") {
+            alert("Invalid Email Address");
+            return;
+        }
+        if (response == "-2") {
+            alert("Please provide strong password");
+            return;
+        }
+        if (response == "-3") {
+            alert("User already exist. Please provide unique value");
+            return;
+        }
+    }
+
+</script>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>

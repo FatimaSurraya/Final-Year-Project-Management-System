@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Year Project Management System</title>
+
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Morris -->
+    <link href="~/Content/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+
+    <link href="~/Content/css/animate.css" rel="stylesheet">
+    <link href="~/Content/css/style.css" rel="stylesheet">
+    <link rel="icon" href="../images/photos/logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold"> <label id="store"></label></strong>
+                                </span> <span class="text-muted text-xs block">Controls <b class="caret"></b></span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="/Home/Logout">Logout</a></li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        SP
+                    </div>
+                </li>
+                <li>
+                    @if (Session["RoleName"] != null)
+                    {
+                        if (Session["RoleName"].ToString() == "Admin")
+                        {
+                            <a href="#"><i class="fa fa-book"></i> <span class="nav-label">Accounts</span> <span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="/User/CreateUser">Add User</a></li>
+                                <li><a href="/User/UsersDetail">View Users</a></li>
+                            </ul>
+                        }
+                        if (Session["RoleName"].ToString() == "Supervisor")
+                        {
+                            <ul class="nav nav-second-level collapse in">
+                                <li><a href="/Project/AddProject">Add Project</a></li>
+                                <li><a href="/Project/ListAllProjects">View Projects</a></li>
+                                <li><a href="/Project/ListAllTasks">Tasks</a></li>
+                                <li><a href="/Message/Message">Messages</a></li>
+                                <li><a href="/Meeting/ListAllMeetings">Meetings</a></li>
+                                <li><a href="/Project/ListAllProjects">Results</a></li>
+                                <li><a href="/Project/ListAllProjects">Timetable</a></li>
+                            </ul>
+                        }
+                        if (Session["RoleName"].ToString() == "Student")
+                        {
+                            <ul class="nav nav-second-level collapse in">
+                                <li><a href="/Project/ListAllStudentProjects">View Projects</a></li>
+                                <li><a href="/Project/ShowAllTasks">Tasks Assigned</a></li>
+                                <li><a href="/Message/Message">Messages</a></li>
+                                <li><a href="/Meeting/ListAllStudentMeetings">Meetings</a></li>
+                                <li><a href="/Project/ShowAllTasks">Results</a></li>
+                                <li><a href="/Project/ShowAllTasks">Timetable</a></li>
+                            </ul>
+                        }
+                    }
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="wrapper">
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                        <!-- <form role="search" class="navbar-form-custom" action="search_results.html">
+                            <div class="form-group">
+                                <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                            </div>
+                        </form> -->
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <span class="m-r-sm text-muted welcome-message">@Session["Email"]</span>
+                            @if (Session["RoleName"] != null)
+                            {
+                                if (Session["RoleName"].ToString() == "Supervisor")
+                                {
+                                    <span class="m-r-sm text-muted welcome-message">  Supervisor Panel</span>
+                                }
+                                if (Session["RoleName"].ToString() == "Admin")
+                                {
+                                    <span class="m-r-sm text-muted welcome-message">  Admin Panel</span>
+                                }
+                                if (Session["RoleName"].ToString() == "Student")
+                                {
+                                    <span class="m-r-sm text-muted welcome-message">  Student Panel</span>
+                                }
+                            }
+                        </li>
+
+                        <li>
+                            <a href="/Home/Logout">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script src="~/Content/js/jquery-2.1.1.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Content/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- FooTable -->
+    <script src="~/Content/js/plugins/footable/footable.all.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="~/Content/js/inspinia.js"></script>
+    <script src="~/Content/js/plugins/pace/pace.min.js"></script>
+    <script type="text/javascript">
+        function preventBack() {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+    </script>
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            // setTimeout('SessionEnd()', sTimeout);
+            setTimeout("preventBack()", 0);
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+
+    </script>
+</body>
+
+</html>

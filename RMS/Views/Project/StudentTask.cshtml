@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "StudentTask";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+@model List<RMS.Models.Task>
+
+<style>
+    /* Define a custom class for the select element */
+    .custom-select {
+        appearance: none; /* Remove default styling on certain browsers */
+        -webkit-appearance: none; /* Remove default styling on Safari/Chrome */
+        -moz-appearance: none; /* Remove default styling on Firefox */
+        padding: 10px; /* Adjust padding as needed */
+        border: 1px solid #ccc; /* Add a border */
+        border-radius: 5px; /* Add rounded corners */
+        background-color: #fff; /* Set background color */
+        color: #333; /* Set text color */
+        width: 60%; /* Set width to 100% */
+        cursor: pointer; /* Change cursor on hover */
+    }
+
+        /* Style the dropdown arrow */
+        .custom-select::after {
+            content: "\25BC"; /* Unicode arrow-down symbol */
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none; /* Prevent clicking on the arrow */
+        }
+
+        /* Style the selected option */
+        .custom-select option:checked {
+            background-color: #007bff; /* Highlight the selected option */
+            color: #fff; /* Text color for selected option */
+        }
+
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="wrapper wrapper-content">
+                        <div class="row">
+                            @if (Model.Count() > 0)
+                            {
+                                <table class="table  table-hover table-responsive table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Task Name</th>
+                                            <th>Task Description</th>
+                                            <th>Due Date</th>
+                                            <th>Task Status</th>
+                                            <th>Document</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_body" class="scrollable">
+                                        @foreach (var task in Model)
+                                        {
+                                            <tr>
+                                                <td>@task.TaskName</td>
+                                                <td>@task.TaskDescription</td>
+                                                <td>@task.DueDate.Value.Date</td>
+                                                <td>
+                                                    <select class="custom-select task-status-dropdown" data-task-id="@task.TaskId" data-student-id="@task.AssignedTo">
+                                                        <option value="Not Started" @(task.TaskStatus == "Not Started" ? "selected" : "")>Not Started</option>
+                                                        <option value="In Progress" @(task.TaskStatus == "In Progress" ? "selected" : "")>In Progress</option>
+                                                        <option value="Completed" @(task.TaskStatus == "Completed" ? "selected" : "")>Completed</option>
+                                                    </select>
+
+                                                </td>
+                                                <td>
+                                                    <a href="/Project/DownloadDocuments?projectId=@task.ProjectId" class="btn btn-success" target="_blank">Download</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <p>No tasks assigned yet.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".task-status-dropdown").change(function () {
+            var taskId = $(this).data("task-id");
+            var studentId = $(this).data("student-id");
+            var newStatus = $(this).val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Project/UpdateTaskStatus",
+                data: { taskId: taskId, studentId: studentId, newStatus: newStatus },
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Task status updated successfully.");
+                    } else {
+                        console.error("Failed to update task status.");
+                    }
+                },
+                error: function () {
+                    console.error("Failed to send task status update request.");
+                }
+            });
+        });
+    });
+</script>
