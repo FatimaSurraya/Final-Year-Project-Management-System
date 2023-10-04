@@ -1,1 +1,1 @@
-# RMS
+Final Year Project Management System is proposed as the need to enhance the process and management system efficiency. In this project, a web based software solution will be introduced to provide a comfortable environment for FYP management.
